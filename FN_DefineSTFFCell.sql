@@ -9,8 +9,9 @@ DECLARE
 	c character varying(50);
 BEGIN
 	c = (SELECT "Code"
-		FROM "Cell" CLL
-		INNER JOIN "Halfstuff" STFF ON CLL."HalfstuffRefID" = STFF."RefID"
+	 	FROM "Cell" CLL
+			INNER JOIN "Halfstuff" STFF
+	     			ON CLL."HalfstuffRefID" = STFF."RefID"
 		WHERE CLL."IsOpen" = TRUE AND STFF."RefID" = stff_id
 		ORDER BY CLL."ServeTime" DESC
 		LIMIT 1);
@@ -18,7 +19,8 @@ BEGIN
 	BEGIN
 		c = (SELECT "Code"
 		FROM "Cell" CLL
-		INNER JOIN "Halfstuff" STFF ON CLL."HalfstuffRefID" = STFF."RefID"
+			INNER JOIN "Halfstuff" STFF
+				ON CLL."HalfstuffRefID" = STFF."RefID"
 		WHERE CLL."IsOpen" = FALSE AND STFF."RefID" = stff_id
 		ORDER BY CLL."ServeTime" DESC
 		LIMIT 1); 
@@ -36,4 +38,5 @@ EXCEPTION
 
 END $$LANGUAGE 'plpgsql';
 
+IF (1 = 0)
 SELECT * FROM FN_DefineSTFFCell('21f9f975-6838-11ea-8fdb-001d6001edc0');
