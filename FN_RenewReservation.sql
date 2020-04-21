@@ -14,8 +14,12 @@ DECLARE
 	opened boolean;
 BEGIN
 
-cell_id := (SELECT "RefID" FROM "Cell" WHERE "Code" = cell_name);
-stff_id := (SELECT "HalfstuffRefID" FROM "Cell" WHERE "RefID" = cell_id);
+cell_id := (SELECT "RefID" 
+	    FROM "Cell"
+	    WHERE "Code" = cell_name);
+stff_id := (SELECT "HalfstuffRefID" 
+	    FROM "Cell" 
+	    WHERE "RefID" = cell_id);
 
 IF (is_balance_reset_required = FALSE) THEN
 BEGIN
@@ -61,4 +65,5 @@ EXCEPTION
 
 END $$LANGUAGE 'plpgsql';
 
+IF (1 = 0)
 SELECT * FROM FN_RenewReservation('A1_A3', 3, true);
