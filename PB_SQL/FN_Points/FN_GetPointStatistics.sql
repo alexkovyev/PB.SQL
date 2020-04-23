@@ -23,8 +23,14 @@ BEGIN
 		FROM "Order"
 		WHERE 
 			"State" != 'Ready' AND
+<<<<<<< HEAD
+			date_part('day', "OrderDateTime") = date_part('day', NOW()) AND
+			date_part('month', "OrderDateTime") = date_part('month', NOW()) AND
+			date_part('year', "OrderDateTime") = date_part('year', NOW())
+=======
 			"OrderDateTime"::date = NOW()::date
 			
+>>>>>>> 07c01a5e5145c25a8700cd9e13ba5ed6e3a33f44
 	);
 	
 	numberoforderstoday := (
@@ -33,7 +39,13 @@ BEGIN
 		FROM "Order"
 		WHERE
 			"State" = 'Ready' AND
+<<<<<<< HEAD
+			date_part('day', "OrderDateTime") = date_part('day', NOW()) AND
+			date_part('month', "OrderDateTime") = date_part('month', NOW()) AND
+			date_part('year', "OrderDateTime") = date_part('year', NOW())
+=======
 			"OrderDateTime"::date = NOW()::date
+>>>>>>> 07c01a5e5145c25a8700cd9e13ba5ed6e3a33f44
 	);
 	
 	numberoferrors := (
@@ -42,7 +54,13 @@ BEGIN
 		FROM "ClientSideLogs"
 		WHERE 
 			"IsError" = true AND
+<<<<<<< HEAD
+			date_part('day', "created_dt") = date_part('day', NOW()) AND
+			date_part('month', "created_dt") = date_part('month', NOW()) AND
+			date_part('year', "created_dt") = date_part('year', NOW())
+=======
 			"created_dt"::date = NOW()::date
+>>>>>>> 07c01a5e5145c25a8700cd9e13ba5ed6e3a33f44
 	);
 	
 	numberofunavailabledishes := 
@@ -98,6 +116,7 @@ BEGIN
 		numberofunavailabledishes;
 
 END $$ LANGUAGE 'plpgsql';
+
 
 
 

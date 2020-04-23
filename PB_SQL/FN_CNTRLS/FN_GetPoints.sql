@@ -1,20 +1,35 @@
 DROP FUNCTION IF EXISTS FN_GetPoints;
 
 CREATE OR REPLACE FUNCTION FN_GetPoints(
-    cntrlname character varying
+    cntrlname character varying,
+	userprofilerefid uuid
 )
 RETURNS TABLE (
 	ui_name character varying,
 	id integer,
 	enabled boolean
 ) AS
-$$ BEGIN
+$$ 
+DECLARE 
+	isallow boolean;
+BEGIN
+
+	IF (cntrlname = 'OvenPointCNTRL') THEN
+		isallow = (
+			FN_CheckPermissionByUserProfile(14, userprofilerefid, 1) OR
+			FN_CheckPermissionByUserProfile(14, userprofilerefid, 8)
+		);
+		
+		IF (isallow = false) THEN
+			RETURN;
+		END IF;
+	END IF;
 	
 	RETURN QUERY
 	with outpoints(ui_name_xml, outpoint_xml) as (
 		select 
 			xpath('//UI_Name/text()', "ExtendedParams"),
-			unnest(xpath('//OutPoint', "ExtendedParams"))
+			unnest(xpath('//Point', "ExtendedParams"))
 		from "Controllers"
 		where "Name" = cntrlname
 	)

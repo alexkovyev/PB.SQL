@@ -11,7 +11,9 @@ RETURNS TABLE (
 	userLN character varying,
 	userEmail character varying,
 	userPhone character varying,
-	roleName character varying
+	roleName character varying,
+	pages character varying[],
+	userProfileRefID uuid
 ) AS 
 $$ BEGIN
 	RETURN QUERY SELECT 
@@ -21,7 +23,20 @@ $$ BEGIN
 		U."LastName" as "userLN",
 		U."Email" as "userEmail",
 		U."Phone" as "userPhone",
-		RL."Name" as "roleName"
+		RL."Name" as "roleName",
+		(
+			SELECT 
+				array_agg(SO."Name")
+			FROM "SecurityObjects" SO
+			WHERE 
+				(
+					FN_CheckPermissionByRole(SO."SecurityObjectID", RL."RefID", 1) = true OR
+					FN_CheckPermissionByRole(SO."SecurityObjectID", RL."RefID", 2) = true OR
+					FN_CheckPermissionByRole(SO."SecurityObjectID", RL."RefID", 4) = true
+				) AND
+				SO."Description" = 'Page'
+		),
+		UP."RefID"
 	FROM "Users" U
 		INNER JOIN "UserProfile" UP 
 			ON UP."UserRefID" = U."RefID"
@@ -33,3 +48,8 @@ $$ BEGIN
 	FOR UPDATE;
 
 END $$ LANGUAGE 'plpgsql';
+
+
+
+
+
